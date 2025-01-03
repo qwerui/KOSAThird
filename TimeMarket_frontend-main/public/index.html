@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <!-- HTML에서 CSRF 토큰을 메타 태그로 삽입 -->
+    <meta name="csrf-token" content="${_csrf.token}">
+
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+    <script>
+      function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(';').shift();
+      }
+    
+      function setCsrfMetaTag() {
+          const csrfToken = getCookie('XSRF-TOKEN'); // Adjust the cookie name if necessary
+          if (csrfToken) {
+              let metaTag = document.querySelector('meta[name="csrf-token"]');
+              if (metaTag) {
+                  metaTag.setAttribute('content', csrfToken);
+              } else {
+                  metaTag = document.createElement('meta');
+                  metaTag.name = 'csrf-token';
+                  metaTag.content = csrfToken;
+                  document.head.appendChild(metaTag);
+              }
+          } else {
+              console.error('CSRF token not found in cookies.');
+          }
+      }
+    
+      // Call the function to set the meta tag on page load
+      document.addEventListener('DOMContentLoaded', setCsrfMetaTag);
+    </script>
+  </body>
+</html>
